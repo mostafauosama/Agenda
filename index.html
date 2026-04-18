@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>📋 جدول الأعمال - إدارة التذاكر</title>
+    <title>📋 جدول الأعمال - نظام إدارة التذاكر</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,6 @@
             margin: 0 auto;
         }
 
-        /* الهيدر */
         .header {
             text-align: center;
             margin-bottom: 28px;
@@ -46,7 +45,6 @@
             margin-top: 8px;
         }
 
-        /* أزرار الطباعة */
         .print-buttons {
             display: flex;
             gap: 12px;
@@ -79,7 +77,6 @@
             border: none;
         }
 
-        /* البطاقات */
         .card {
             background: rgba(255,255,255,0.97);
             border-radius: 32px;
@@ -319,7 +316,6 @@
             color: #64748b;
         }
 
-        /* أنماط الطباعة */
         @media print {
             body {
                 background: white;
@@ -355,25 +351,23 @@
 <div class="container">
     <div class="header">
         <h1 id="mainTitle">📋 جدول الأعمال</h1>
-        <p>إدارة المهام • إخفاء المغلقة تلقائياً • تقارير طباعة</p>
+        <p>نظام إدارة التذاكر • تسجيل المهام المنجزة والمتبقية</p>
     </div>
 
-    <!-- أزرار الطباعة -->
     <div class="print-buttons">
-        <button class="btn-print btn-print-primary" id="printOpenBtn">🖨️ طباعة الأعمال المفتوحة</button>
-        <button class="btn-print btn-print-secondary" id="printClosedBtn">📄 طباعة الأعمال المغلقة</button>
+        <button class="btn-print btn-print-primary" id="printOpenBtn">🖨️ طباعة المفتوحة</button>
+        <button class="btn-print btn-print-secondary" id="printClosedBtn">📄 طباعة المغلقة</button>
     </div>
 
-    <!-- بطاقة إضافة تذكرة جديدة -->
     <div class="card">
         <div class="card-title">✨ تذكرة جديدة</div>
         <div class="input-field">
             <label>🏷️ عنوان التذكرة</label>
-            <input type="text" id="ticketTitle" placeholder="مثال: تطوير تطبيق المبيعات">
+            <input type="text" id="ticketTitle" placeholder="أدخل عنوان التذكرة">
         </div>
         <div class="input-field">
             <label>📝 الموضوع / المهام الرئيسية</label>
-            <textarea id="ticketSubject" rows="2" placeholder="وصف عام للتذكرة..."></textarea>
+            <textarea id="ticketSubject" rows="2" placeholder="أدخل وصف التذكرة"></textarea>
         </div>
         <div class="input-field">
             <label>📅 تاريخ الإنشاء</label>
@@ -381,22 +375,21 @@
         </div>
         <div class="input-field">
             <label>✅ المهام التي تم إنجازها (افصل بينها بفاصلة)</label>
-            <textarea id="completedTasks" rows="2" placeholder="مثال: تصميم الواجهة, ربط API"></textarea>
+            <textarea id="completedTasks" rows="2" placeholder="مهمة1, مهمة2, مهمة3"></textarea>
         </div>
         <div class="input-field">
             <label>⏳ المهام المتبقية (افصل بينها بفاصلة)</label>
-            <textarea id="remainingTasks" rows="2" placeholder="مثال: اختبار التطبيق, توثيق الكود"></textarea>
+            <textarea id="remainingTasks" rows="2" placeholder="مهمة1, مهمة2, مهمة3"></textarea>
         </div>
         <button class="btn-primary" id="addTicketBtn">➕ إضافة التذكرة</button>
     </div>
 
-    <!-- قائمة التذاكر المفتوحة فقط -->
     <div class="stats">
         <h2 id="sectionTitle">📋 جدول الأعمال</h2>
         <div class="badge-count" id="ticketCount">0 تذكرة</div>
     </div>
     <div id="ticketsContainer" class="tickets-list">
-        <div class="empty-state">📭 لا توجد تذاكر مفتوحة حالياً<br>أضف تذكرة جديدة</div>
+        <div class="empty-state">📭 لا توجد تذاكر<br>➕ أضف تذكرتك الأولى</div>
     </div>
 </div>
 
@@ -404,44 +397,31 @@
     let tickets = [];
 
     function loadFromStorage() {
-        const stored = localStorage.getItem("mobileTicketAppV3");
+        const stored = localStorage.getItem("realTicketSystem");
         if(stored) {
             tickets = JSON.parse(stored);
         } else {
-            const today = new Date().toISOString().slice(0,10);
-            tickets = [
-                {
-                    id: "#001",
-                    title: "تحسين أداء الموقع",
-                    subject: "مراجعة سرعة التحميل وتحسين الصور وتقليل الـ JavaScript",
-                    createdAt: today,
-                    completedTasksList: ["تحليل السرعة", "ضغط الصور"],
-                    remainingTasksList: ["تقليل الـ JS", "اختبار نهائي"],
-                    isClosed: false
-                },
-                {
-                    id: "#002",
-                    title: "تحديث قاعدة البيانات",
-                    subject: "ترحيل البيانات إلى الخادم الجديد",
-                    createdAt: today,
-                    completedTasksList: ["نسخ احتياطي"],
-                    remainingTasksList: ["ترحيل الجداول", "اختبار الاستعلامات"],
-                    isClosed: false
-                }
-            ];
+            tickets = [];
         }
         renderOpenTickets();
     }
 
     function saveToStorage() {
-        localStorage.setItem("mobileTicketAppV3", JSON.stringify(tickets));
+        localStorage.setItem("realTicketSystem", JSON.stringify(tickets));
     }
 
     function generateId() {
-        return "#" + Math.floor(Math.random() * 9000 + 1000);
+        const now = new Date();
+        const timestamp = now.getFullYear().toString().slice(-2) +
+                         (now.getMonth() + 1).toString().padStart(2, '0') +
+                         now.getDate().toString().padStart(2, '0') +
+                         now.getHours().toString().padStart(2, '0') +
+                         now.getMinutes().toString().padStart(2, '0') +
+                         now.getSeconds().toString().padStart(2, '0');
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `TK-${timestamp}-${random}`;
     }
 
-    // عرض التذاكر المفتوحة فقط (غير المغلقة)
     function renderOpenTickets() {
         const container = document.getElementById("ticketsContainer");
         const countSpan = document.getElementById("ticketCount");
@@ -454,7 +434,7 @@
         mainTitle.innerHTML = "📋 جدول الأعمال";
         
         if(!openTickets.length) {
-            container.innerHTML = '<div class="empty-state">📭 لا توجد تذاكر مفتوحة حالياً<br>➕ أضف تذكرة جديدة</div>';
+            container.innerHTML = '<div class="empty-state">📭 لا توجد تذاكر مفتوحة<br>➕ أضف تذكرة جديدة</div>';
             countSpan.innerText = "0 تذكرة";
             return;
         }
@@ -502,8 +482,8 @@
                         <button class="btn-small btn-warning" data-id="${ticket.id}" data-action="addRemaining">⏳ إضافة متبقي</button>
                         <button class="btn-small btn-close" data-id="${ticket.id}" data-action="closeTicket">🔒 إغلاق التذكرة</button>
                     </div>
-                    <div class="input-row" id="inputRow_${ticket.id}" style="display:none;">
-                        <input type="text" id="taskInput_${ticket.id}" placeholder="اسم المهمة...">
+                    <div class="input-row" id="inputRow_${ticket.id.replace(/[^a-zA-Z0-9]/g, '_')}" style="display:none;">
+                        <input type="text" id="taskInput_${ticket.id.replace(/[^a-zA-Z0-9]/g, '_')}" placeholder="اسم المهمة...">
                         <button class="btn-small btn-success" data-id="${ticket.id}" data-submit="task">إضافة</button>
                         <button class="btn-small" style="background:#cbd5e1;" data-cancel="${ticket.id}">إلغاء</button>
                     </div>
@@ -540,31 +520,34 @@
         document.querySelectorAll('[data-submit="task"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = btn.getAttribute('data-id');
-                const input = document.getElementById(`taskInput_${id}`);
+                const safeId = id.replace(/[^a-zA-Z0-9]/g, '_');
+                const input = document.getElementById(`taskInput_${safeId}`);
                 const taskName = input?.value.trim();
                 if(!taskName) { alert("الرجاء كتابة اسم المهمة"); return; }
                 const pendingType = btn.getAttribute('data-pending-type');
                 if(pendingType === 'completed') addTaskToTicket(id, taskName, 'completed');
                 else if(pendingType === 'remaining') addTaskToTicket(id, taskName, 'remaining');
-                document.getElementById(`inputRow_${id}`).style.display = 'none';
+                document.getElementById(`inputRow_${safeId}`).style.display = 'none';
             });
         });
         
         document.querySelectorAll('[data-cancel]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = btn.getAttribute('data-cancel');
-                document.getElementById(`inputRow_${id}`).style.display = 'none';
+                const safeId = id.replace(/[^a-zA-Z0-9]/g, '_');
+                document.getElementById(`inputRow_${safeId}`).style.display = 'none';
             });
         });
     }
     
     function showInputRow(ticketId, type) {
-        const row = document.getElementById(`inputRow_${ticketId}`);
+        const safeId = ticketId.replace(/[^a-zA-Z0-9]/g, '_');
+        const row = document.getElementById(`inputRow_${safeId}`);
         if(row) {
             row.style.display = 'flex';
             const submitBtn = row.querySelector('[data-submit="task"]');
             if(submitBtn) submitBtn.setAttribute('data-pending-type', type);
-            const input = document.getElementById(`taskInput_${ticketId}`);
+            const input = document.getElementById(`taskInput_${safeId}`);
             if(input) input.value = '';
             input?.focus();
         }
@@ -586,7 +569,6 @@
             }
         }
         
-        // التحقق إذا أصبحت المهام المتبقية فارغة
         if(ticket.remainingTasksList.length === 0) {
             ticket.isClosed = true;
         }
@@ -618,9 +600,11 @@
         const completedRaw = document.getElementById("completedTasks").value;
         const remainingRaw = document.getElementById("remainingTasks").value;
         
-        if(!title) { alert("✏️ الرجاء كتابة عنوان التذكرة"); return; }
-        if(!subject) { alert("📝 الرجاء كتابة الموضوع/المهام"); return; }
-        if(!date) date = new Date().toISOString().slice(0,10);
+        if(!title) { alert("الرجاء كتابة عنوان التذكرة"); return; }
+        if(!subject) { alert("الرجاء كتابة الموضوع"); return; }
+        if(!date) {
+            date = new Date().toISOString().slice(0,10);
+        }
         
         const completedTasksList = completedRaw ? completedRaw.split(",").map(s=>s.trim()).filter(s=>s) : [];
         const remainingTasksList = remainingRaw ? remainingRaw.split(",").map(s=>s.trim()).filter(s=>s) : [];
@@ -645,7 +629,6 @@
         document.getElementById("remainingTasks").value = "";
     }
     
-    // طباعة الأعمال المفتوحة
     function printOpenTickets() {
         const openTickets = tickets.filter(t => !t.isClosed);
         if(openTickets.length === 0) {
@@ -684,7 +667,7 @@
                         <span class="date">📅 ${ticket.createdAt}</span>
                     </div>
                     <div><strong>المعرف:</strong> ${ticket.id}</div>
-                    <div class="subject"><strong>📝 الموضوع:</strong><br>${escapeHtml(ticket.subject)}</div>
+                    <div class="subject"><strong>الموضوع:</strong><br>${escapeHtml(ticket.subject)}</div>
                     <div class="tasks"><span class="completed">✅ المنجز:</span> ${ticket.completedTasksList?.join("، ") || "—"}</div>
                     <div class="tasks"><span class="remaining">⏳ المتبقي:</span> ${ticket.remainingTasksList?.join("، ") || "—"}</div>
                 </div>
@@ -696,7 +679,6 @@
         printWindow.print();
     }
     
-    // طباعة الأعمال المغلقة
     function printClosedTickets() {
         const closedTickets = tickets.filter(t => t.isClosed === true);
         if(closedTickets.length === 0) {
@@ -734,7 +716,7 @@
                         <span class="date">📅 ${ticket.createdAt}</span>
                     </div>
                     <div><strong>المعرف:</strong> ${ticket.id} <span class="closed-badge">✔ مغلقة</span></div>
-                    <div class="subject"><strong>📝 الموضوع:</strong><br>${escapeHtml(ticket.subject)}</div>
+                    <div class="subject"><strong>الموضوع:</strong><br>${escapeHtml(ticket.subject)}</div>
                     <div class="tasks"><span class="completed">✅ جميع المهام المنجزة:</span> ${ticket.completedTasksList?.join("، ") || "—"}</div>
                 </div>
             `);
